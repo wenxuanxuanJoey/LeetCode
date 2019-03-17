@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    struct TempNode{
+        TreeNode* node;
+        bool isFirst;
+    };
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> temp;
+        TreeNode* p=root;
+        if(p==NULL) return temp;
+        stack<TempNode*> st;
+        TempNode* TNode = new TempNode;
+        while(p!=NULL || !st.empty()){
+            while(p!=NULL){
+                TempNode *StNode = new TempNode;//指针访问前必须给其一个内存空间或者一个指向某内存空间的地址
+                StNode->node=p;
+                StNode->isFirst=true;
+                st.push(StNode);
+                p=p->left;
+            }
+            if(!st.empty()){
+                TNode=st.top();
+                st.pop();
+                if(TNode->isFirst==true){
+                    TNode->isFirst=false;
+                    st.push(TNode);
+                    p=TNode->node->right;
+                }else{
+                    temp.push_back(TNode->node->val);
+                }
+            }
+        }
+        delete TNode;
+        TNode=NULL;
+       
+        return temp;
+    }
+};
