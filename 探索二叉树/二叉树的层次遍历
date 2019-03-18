@@ -1,0 +1,47 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        TreeNode* p;
+        vector<vector<int>> result;
+        vector<int> levelRes;
+        if(root==NULL) return result;
+        queue<TreeNode*> qu;
+        qu.push(root);
+        int count=0;//下一层次的节点数，即当前层次每个节点的左右孩子数目
+        int levelNum=1;//当前层次的节点数
+        while(!qu.empty()){
+            p=qu.front();
+            levelRes.push_back(p->val);
+            levelNum--;
+            qu.pop();
+            if(p->left!=NULL){
+                count++;
+                qu.push(p->left);
+            }
+            if(p->right!=NULL){
+                count++;
+                qu.push(p->right);
+            }
+            //当当前层次的每个节点都遍历完成后，将该层节点的值存储后，进入下一层次遍历
+            if(levelNum==0){
+                result.push_back(levelRes);
+                levelRes.clear();
+                levelNum=count;
+                count=0;
+            }
+            
+        }
+        return result;
+        
+        
+    }
+};
